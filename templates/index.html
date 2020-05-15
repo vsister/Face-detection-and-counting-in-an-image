@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Quick count</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+
+<div class="header">
+    <p>
+        {% if current_user.is_anonymous %}
+    <button type="button" class="buttons_header reg" onclick="document.getElementById('modal2').style.display='block'">Sign up</button>
+    <button type="button" class="buttons_header" onclick="document.getElementById('modal1').style.display='block'">Log in</button>
+         {% endif %}
+   {% if current_user.is_authenticated %}
+    <form method='get' action='/logout'>
+    <input type="submit" class="buttons_header reg" value="Log out">
+    </form>
+    {% endif %}
+</div>
+
+    </p>
+
+<p>
+
+<div id="modal1" class= "{{form1}} modal">
+    <div class="mcontent animate">
+        <form action="/login" method="POST">
+            <div class="formbox">
+                <span  onclick="document.getElementById('modal1').style.display='none'" class="exit" title="Exit">×</span>
+            </div>
+            <div class="box">
+                  {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                         {% for message in messages %}
+                         {{ message }}
+                        {% endfor %}
+                    {% endif %}
+                 {% endwith %}
+                <label for="username"><b>Username</b></label>
+                <input type="username" placeholder="Enter Username" name="username" required>
+                <label for="password"><b>Password</b></label>
+                <input type="password" placeholder="Enter Password" name="password" required>
+                <button type="submit">Log in</button>
+            </div>
+        </form>
+    </div>
+</div>
+ <div id="modal2" class="{{form2}} modal">
+        <div class="mcontent animate">
+            <form action="/registration" method="POST">
+                <div class="formbox">
+                    <span onclick="document.getElementById('modal2').style.display='none'" class="exit" title="Exit">×</span>
+                </div>
+                <div class="box">
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                             {% for message in messages %}
+                             {{ message }}
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    <label for="username"><b>Username</b></label>
+                    <input type="username" placeholder="Enter Username" name="username" required>
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" placeholder="Enter Password" name="password" required>
+                    <button type="submit">Sign up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+<div class="content">
+    <p>
+    <form method="POST" action="/image" enctype="multipart/form-data" >
+            <p><input type="file" name="photo" accept="image/jpeg,image/png" >
+            <input type="submit" value="Send"></p>
+    </form>
+       <form method="GET"  action="/video" >
+    <input type="submit" class="button_cam" value="Camera">
+    </form>
+    </p>
+
+
+            {% if number %}
+                {{ number}}
+            {% endif %}
+            {% if message %}
+                {{ message}}
+        {% else %}
+         Download image JPEG, PNG or take picture from camera. Log in first.
+        {% endif %}
+
+            <br>
+             {% if img_name %}
+            <div class = img>
+
+               <a href="/count?image={{img_name}}"> <img src="{{'./static/' +img_name}}" width = 300 heighth = 200 > </a>
+            </div>
+            {% endif %}
+            {% if video %}
+              <img src="{{ url_for('get_video') }}"  width = 300 heighth = 200 />
+                <form method='get' action='/vcount'>
+                <input type="submit"  class = "cam" value="Count">
+                </form>
+             {% endif %}
+        </div>
+
+</p>
+
+
+
+<script>
+    var modal1 = document.getElementById('modal1');
+    window.onclick = function(event) {
+        if (event.target == modal1) {
+            this.modal1.style.display = "none";
+        }
+    }
+    var modal2 = document.getElementById('modal2');
+    window.onclick = function(event) {
+        if (event.target == modal2) {
+            this.modal2.style.display = "none";
+        }
+    }
+</script>
+
+
+    </body>
+
+</html>
